@@ -2,11 +2,10 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-from tensorflow.keras.models import load_model
 from sklearn.preprocessing import StandardScaler
 
 # Load the pre-trained model
-model = load_model('model.h5')
+model = tf.keras.models.load_model('model.h5')
 
 
 # Function to scale the input features
