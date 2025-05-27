@@ -4,13 +4,11 @@ import pandas as pd
 import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 
-# Load the pre-trained model
+
 model = tf.keras.models.load_model('model.h5')
 
 
-# Function to scale the input features
 def scale_input_data(input_data, scaler):
-    # Scaling the input data using the same scaler used during training
     input_data_scaled = scaler.transform(input_data)
     return input_data_scaled
 
@@ -24,11 +22,11 @@ df = df.drop(columns=['Geography', 'Gender'])
 
 scaler = StandardScaler()
 scaler.fit(df)
-# Streamlit app
+
 st.title("Customer Churn Prediction App")
 st.write("Enter customer details below to predict the likelihood of churn:")
 
-# User input fields
+
 credit_score = st.number_input("Credit Score", min_value=300, max_value=900, value=619)
 age = st.number_input("Age", min_value=18, max_value=100, value=42)
 tenure = st.number_input("Tenure (years)", min_value=0, max_value=10, value=2)
@@ -47,24 +45,19 @@ has_credit_card = 1 if has_credit_card == 'Yes' else 0
 is_active_member = 1 if is_active_member == 'Yes' else 0
 
 
-# Transform categorical variables to numerical
-# has_credit_card = 1 if has_credit_card == 'Yes' else 0
-# is_active_member = 1 if is_active_member == 'Yes' else 0
 
-# Combine all input data into a DataFrame
 input_data = pd.DataFrame([[credit_score, age, tenure, balance, num_of_products, has_credit_card, is_active_member,
                             estimated_salary, geography_germany, geography_spain, gender_male]],
                           columns=['CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts', 'HasCrCard',
                                    'IsActiveMember', 'EstimatedSalary', 'Geography_Germany', 'Geography_Spain',
                                    'Gender_Male'])
 
-# Scale the input data
+
 input_data_scaled = scale_input_data(input_data, scaler)
 
-# Prediction
 if st.button("Predict"):
     prediction = model.predict(input_data_scaled)
-    churn_probability = prediction[0][0]  # Get the probability value
+    churn_probability = prediction[0][0] 
     churn_result = (churn_probability > 0.5).astype(int)
     churn_not = 1.00 - churn_probability
 
